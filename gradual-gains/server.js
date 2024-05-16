@@ -3,6 +3,9 @@ require('dotenv').config()
 
 // import express library
 const express = require('express')
+// import routes
+const workoutRoutes = require('./routes/workouts')
+
 // initialize express app
 const app = express()
 
@@ -13,12 +16,10 @@ app.use((req, res, next) => {
 })
 
 // routes
-app.get('/', (req, res) => {
-    res.json({mssg: 'Welcome to the app'})
-})
+app.use('/api/workouts', workoutRoutes)
 
 // listen for requests
 app.listen(process.env.PORT, () => {
-    console.log('Listening on port 4000!')
+    console.log('Listening on port', process.env.PORT)
 })
 
