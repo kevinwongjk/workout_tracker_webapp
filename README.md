@@ -35,7 +35,7 @@ We welcome contributions! Please read our CONTRIBUTING.md for details on our cod
 This project is licensed under the MIT License - see the LICENSE.md file for details.
 
 ## Contact
-For any inquiries, please contact Kevin Wong at email@example.com.
+For any inquiries, please contact Kevin Wong at kevinwong.jk@gmail.com.
 
 ## 
 GradualGains © 2024. All rights reserved.
