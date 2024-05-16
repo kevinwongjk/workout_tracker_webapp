@@ -1,3 +1,6 @@
+// import env variables
+require('dotenv').config()
+
 // import express library
 const express = require('express')
 // initialize express app
@@ -9,6 +12,7 @@ app.get('/', (req, res) => {
 })
 
 // listen for requests
-app.listen(4000, () => {
+app.listen(process.env.PORT, () => {
     console.log('Listening on port 4000!')
 })
+
