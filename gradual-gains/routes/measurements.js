@@ -31,7 +31,6 @@ router.get('/weight/:id', (req, res) => {
     res.json({"mssg": "get a weight measurement"})
 })
 
-
 // // DELETE a weight measurement
 router.delete('/weight/:id', (req, res) => {
     res.json({"mssg": "delete a weight measurement"})
