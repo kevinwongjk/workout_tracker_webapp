@@ -1,4 +1,5 @@
 const express = require('express')
+const UserMeasurements = require('../models/measurementModel')
 // const {
 //     createWorkout,
 //     getWorkouts,
@@ -16,12 +17,27 @@ const express = require('express')
 const router = express.Router()
 
 // GET all measurements
-// router.get('/', getMeasurements)
-router.get('/', (req, res) => {
-    res.json({"mssg": "hello"})
+// router.get('/', (req, res) => {
+//     res.json({"mssg": "hello"})
+// })
+router.get('/:id', async (req, res) => {
+    const { id } = req.params;
+
+    try {
+        const userMeasurements = await UserMeasurements.findOne({ userId });
+        if (!userMeasurements) {
+            return res.status(404).json({ error: 'No measurements found for this usser' })
+        }
+        res.status(200).json(userMeasurements.measurements)
+    }   catch (error) {
+        res.status(400).json({ error: error.message })
+    }
 })
 
 // POST a new weight measurement
+// router.post('/weight', (req, res) => {
+//     res.json({"mssg": "post a new weight measurement"})
+// })
 router.post('/weight', (req, res) => {
     res.json({"mssg": "post a new weight measurement"})
 })
