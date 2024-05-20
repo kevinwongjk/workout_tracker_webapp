@@ -22,13 +22,20 @@ router.get('/', (req, res) => {
 })
 
 // POST a new weight measurement
-router.post('/weight/', createWeightMeasurement)
+router.post('/weight', (req, res) => {
+    res.json({"mssg": "post a new weight measurement"})
+})
 
-// // GET a single workout
-router.get('/weight/:id', getWeightMeasurement)
+// GET a weight measurement
+router.get('/weight/:id', (req, res) => {
+    res.json({"mssg": "get a weight measurement"})
+})
 
-// DELETE a weight measurement
-router.delete('/weight/:id', deleteWeightMeasurement)
+
+// // DELETE a weight measurement
+router.delete('/weight/:id', (req, res) => {
+    res.json({"mssg": "delete a weight measurement"})
+})
 
 // POST a new body fat measurement
 
