@@ -26,7 +26,6 @@ router.get('/:userId', async (req, res) => {
 
 // GET a single measurement
 
-
 // POST a new weight measurement
 router.post('/:userId', async (req, res) => {
     const { userId } = req.params;
@@ -113,39 +112,22 @@ router.delete('/weight/:id', (req, res) => {
     res.json({"mssg": "delete a weight measurement"})
 })
 
-// POST a new body fat measurement
-
-// Post a new neck measurement
-
-// Post a new shoulders measurement
-// Post a new chest measurement
-// Post a new left bicep measurement
-// Post a new right bicep measurement
-// Post a new left forearm measurement
-// Post a new right forearm measurement
-// Post a new upper abs measurement
-// Post a new waist measurement
-// Post a new lower abs measurement
-// Post a new hips measurement
-// Post a new left thigh measurement
-// Post a new right thigh measurement
-// Post a new left calf measurement
-// Post a new right calf measurement
-
-
-// // GET all workouts
-// router.get('/', getWorkouts)
-
-// // GET a single workout
-// router.get('/:id', getWorkout)
-
-// // POST a new workout
-// router.post('/', createWorkout)
-
-// // DELETE a workout
-// router.delete('/:id', deleteWorkout)
-
-// // UPDATE a workout
-// router.patch('/:id', updateWorkout)
+// DELETE all measurements
+router.delete('/:userId', async (req, res) => {
+    const { userId } = req.params;
+  
+    try {
+      const userMeasurements = await UserMeasurements.findOne({ userId });
+      if (!userMeasurements) {
+        return res.status(404).json({ message: 'No measurements found for this user' });
+      }
+  
+      userMeasurements.measurements = {};
+      await userMeasurements.save();
+      res.status(200).json({ message: 'All measurements deleted successfully' });
+    } catch (error) {
+      res.status(400).json({ error: error.message });
+    }
+  });
 
 module.exports = router
