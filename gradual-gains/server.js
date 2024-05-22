@@ -15,7 +15,7 @@ app.use(express.json())
 
 app.use((req, res, next) => {
     console.log(req.path, req.method)
-    next()  
+    next()
 })
 
 // routes
@@ -28,7 +28,7 @@ mongoose.connect(process.env.MONG_URI)
         // listen for requests
         app.listen(process.env.PORT, () => {
             console.log('connected to db * Listening on port', process.env.PORT)
-        })     
+        })
     })
     .catch((error) => {
         console.log(error)
