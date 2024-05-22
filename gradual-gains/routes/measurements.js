@@ -128,6 +128,34 @@ router.delete('/:userId', async (req, res) => {
     } catch (error) {
       res.status(400).json({ error: error.message });
     }
-  });
+  })
+
+  // DELETE all of a specific measurement
+  router.delete('/:userId/:type', async (req, res) => {
+    const { userId, type } = req.params;
+  
+    const validTypes = [
+      'weight', 'bodyfat', 'neck', 'shoulders', 'chest', 'leftBicep', 'rightBicep',
+      'leftForearm', 'rightForearm', 'upperAbs', 'waist', 'lowerAbs', 'hips',
+      'leftThigh', 'rightThigh', 'leftCalf', 'rightCalf'
+    ];
+  
+    if (!validTypes.includes(type)) {
+      return res.status(400).json({ error: 'Invalid measurement type' });
+    }
+  
+    try {
+      const userMeasurements = await UserMeasurements.findOne({ userId });
+      if (!userMeasurements) {
+        return res.status(404).json({ message: 'No measurements found for this user' });
+      }
+  
+      userMeasurements.measurements[type] = [];
+      await userMeasurements.save();
+      res.status(200).json({ message: `All measurements of type ${type} deleted successfully` });
+    } catch (error) {
+      res.status(400).json({ error: error.message });
+    }
+  })
 
 module.exports = router
