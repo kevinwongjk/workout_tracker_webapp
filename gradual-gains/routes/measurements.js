@@ -24,7 +24,40 @@ router.get('/:userId', async (req, res) => {
     }
   })
 
-// GET a single measurement
+// GET all entries of specific measurement
+
+
+// GET the last entry of specific measurement
+router.get('/:userId/:type/last', async (req, res) => {
+    const { userId, type } = req.params;
+  
+    const validTypes = [
+      'weight', 'bodyfat', 'neck', 'shoulders', 'chest', 'leftBicep', 'rightBicep',
+      'leftForearm', 'rightForearm', 'upperAbs', 'waist', 'lowerAbs', 'hips',
+      'leftThigh', 'rightThigh', 'leftCalf', 'rightCalf'
+    ];
+  
+    if (!validTypes.includes(type)) {
+      return res.status(400).json({ error: 'Invalid measurement type' });
+    }
+  
+    try {
+      const userMeasurements = await UserMeasurements.findOne({ userId });
+      if (!userMeasurements) {
+        return res.status(404).json({ message: 'No measurements found for this user' });
+      }
+  
+      const measurementsOfType = userMeasurements.measurements[type];
+      if (!measurementsOfType || measurementsOfType.length === 0) {
+        return res.status(404).json({ message: `No ${type} measurements found for this user` });
+      }
+  
+      const lastMeasurement = measurementsOfType[measurementsOfType.length - 1];
+      res.status(200).json(lastMeasurement);
+    } catch (error) {
+      res.status(400).json({ error: error.message });
+    }
+  });
 
 // POST a new weight measurement
 router.post('/:userId', async (req, res) => {
@@ -102,16 +135,6 @@ router.patch('/:userId/:measurementId', async (req, res) => {
     }
   })
 
-// GET a weight measurement
-router.get('/weight/:id', (req, res) => {
-    res.json({"mssg": "get a weight measurement"})
-})
-
-// // DELETE a weight measurement
-router.delete('/weight/:id', (req, res) => {
-    res.json({"mssg": "delete a weight measurement"})
-})
-
 // DELETE all measurements
 router.delete('/:userId', async (req, res) => {
     const { userId } = req.params;
@@ -130,32 +153,32 @@ router.delete('/:userId', async (req, res) => {
     }
   })
 
-  // DELETE all of a specific measurement
-  router.delete('/:userId/:type', async (req, res) => {
-    const { userId, type } = req.params;
-  
-    const validTypes = [
-      'weight', 'bodyfat', 'neck', 'shoulders', 'chest', 'leftBicep', 'rightBicep',
-      'leftForearm', 'rightForearm', 'upperAbs', 'waist', 'lowerAbs', 'hips',
-      'leftThigh', 'rightThigh', 'leftCalf', 'rightCalf'
-    ];
-  
-    if (!validTypes.includes(type)) {
-      return res.status(400).json({ error: 'Invalid measurement type' });
+// DELETE all of a specific measurement
+router.delete('/:userId/:type', async (req, res) => {
+const { userId, type } = req.params;
+
+const validTypes = [
+    'weight', 'bodyfat', 'neck', 'shoulders', 'chest', 'leftBicep', 'rightBicep',
+    'leftForearm', 'rightForearm', 'upperAbs', 'waist', 'lowerAbs', 'hips',
+    'leftThigh', 'rightThigh', 'leftCalf', 'rightCalf'
+];
+
+if (!validTypes.includes(type)) {
+    return res.status(400).json({ error: 'Invalid measurement type' });
+}
+
+try {
+    const userMeasurements = await UserMeasurements.findOne({ userId });
+    if (!userMeasurements) {
+    return res.status(404).json({ message: 'No measurements found for this user' });
     }
-  
-    try {
-      const userMeasurements = await UserMeasurements.findOne({ userId });
-      if (!userMeasurements) {
-        return res.status(404).json({ message: 'No measurements found for this user' });
-      }
-  
-      userMeasurements.measurements[type] = [];
-      await userMeasurements.save();
-      res.status(200).json({ message: `All measurements of type ${type} deleted successfully` });
-    } catch (error) {
-      res.status(400).json({ error: error.message });
-    }
-  })
+
+    userMeasurements.measurements[type] = [];
+    await userMeasurements.save();
+    res.status(200).json({ message: `All measurements of type ${type} deleted successfully` });
+} catch (error) {
+    res.status(400).json({ error: error.message });
+}
+})
 
 module.exports = router
